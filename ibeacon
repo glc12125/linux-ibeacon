@@ -95,7 +95,7 @@ def main(argv=None):
   # default uuid, this is the uuid that the "Beacon Toolkit" iOS app uses
   # https://itunes.apple.com/us/app/beacon-toolkit/id728479775
   # can be overriden with environment variable
-  uuid = os.getenv("IBEACON_UUID", "E20A39F473F54BC4A12F17D1AD07A961")
+  uuid = os.getenv("IBEACON_UUID", "B6365420DD8911E5A8370800200C9A66")
 
   # major and minor ids, can be overriden with environment variable
   major = int(os.getenv("IBEACON_MAJOR", "0"))
