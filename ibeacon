@@ -202,24 +202,28 @@ def main(argv=None):
     if not simulate and not is_valid_device(device):
       print "Error: no such device: %s (try `hciconfig list')" % device
       return 1
- 
+
     # print status info
     print "Advertising on %s with:" % device
     print "       uuid: 0x%s" % uuid
     print "major/minor: %d/%d (0x%s/0x%s)" % (major, minor, major_hex, minor_hex)
     print "      power: %d (0x%s)" % (power, power_hex)
 
+    # first shut down bluetooth
+    process_command("hciconfig %s down" % device)
     # first bring up bluetooth
     process_command("hciconfig %s up" % device)
     # now turn on LE advertising
-    process_command("hciconfig %s leadv" % device)
+    # process_command("hciconfig %s leadv" % device)
     # now turn off scanning
-    process_command("hciconfig %s noscan" % device)
+    # process_command("hciconfig %s noscan" % device)
     # set up the beacon
     # pipe stdout to /dev/null to get rid of the ugly "here's what I did"
     # message from hcitool
     process_command("hcitool -i hci0 cmd 0x08 0x0008 1E 02 01 1A 1A FF 4C 00 02 15 %s %s %s %s 00 >/dev/null" % (split_uuid, split_major_hex, split_minor_hex, power_hex))
- 
+    process_command("hcitool -i hci0 cmd 0x08 0x0006 A0 00 A0 00 03 00 00 00 00 00 00 00 00 07 00 >/dev/null  ")
+    process_command("hcitool -i hci0 cmd 0x08 0x000a 01 >/dev/null")
+    process_command("hciconfig %s noscan" % device)
   except Usage, err:
     print >>sys.stderr, err.msg
     print >>sys.stderr, "for help use --help"
