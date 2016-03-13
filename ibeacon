@@ -211,18 +211,17 @@ def main(argv=None):
 
     # first shut down bluetooth
     process_command("hciconfig %s down" % device)
-    # first bring up bluetooth
+    # then bring up bluetooth
     process_command("hciconfig %s up" % device)
-    # now turn on LE advertising
-    # process_command("hciconfig %s leadv" % device)
-    # now turn off scanning
-    # process_command("hciconfig %s noscan" % device)
     # set up the beacon
     # pipe stdout to /dev/null to get rid of the ugly "here's what I did"
     # message from hcitool
     process_command("hcitool -i hci0 cmd 0x08 0x0008 1E 02 01 1A 1A FF 4C 00 02 15 %s %s %s %s 00 >/dev/null" % (split_uuid, split_major_hex, split_minor_hex, power_hex))
+    # set frequency
     process_command("hcitool -i hci0 cmd 0x08 0x0006 A0 00 A0 00 03 00 00 00 00 00 00 00 00 07 00 >/dev/null  ")
+    # enable advertising
     process_command("hcitool -i hci0 cmd 0x08 0x000a 01 >/dev/null")
+    # no scan
     process_command("hciconfig %s noscan" % device)
   except Usage, err:
     print >>sys.stderr, err.msg
