@@ -216,11 +216,12 @@ def main(argv=None):
     # set up the beacon
     # pipe stdout to /dev/null to get rid of the ugly "here's what I did"
     # message from hcitool
-    process_command("hcitool -i hci0 cmd 0x08 0x0008 1E 02 01 1A 1A FF 4C 00 02 15 %s %s %s %s 00 >/dev/null" % (split_uuid, split_major_hex, split_minor_hex, power_hex))
+    process_command("hcitool -i hci0 cmd 0x08 0x0008 00") # advertise no data 
+    #process_command("hcitool -i hci0 cmd 0x08 0x0008 1E 02 01 1A 1A FF 4C 00 02 15 %s %s %s %s 00" % (split_uuid, split_major_hex, split_minor_hex, power_hex)) # ibeacon
     # set frequency
-    process_command("hcitool -i hci0 cmd 0x08 0x0006 A0 00 A0 00 03 00 00 00 00 00 00 00 00 07 00 >/dev/null  ")
+    process_command("hcitool -i hci0 cmd 0x08 0x0006 A0 00 A1 00 03 00 00 00 00 00 00 00 00 07 00")
     # enable advertising
-    process_command("hcitool -i hci0 cmd 0x08 0x000a 01 >/dev/null")
+    process_command("hcitool -i hci0 cmd 0x08 0x000a 01")
     # no scan
     process_command("hciconfig %s noscan" % device)
   except Usage, err:
